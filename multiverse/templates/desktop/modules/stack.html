@@ -1,0 +1,18 @@
+<div class="panel panel-default stack">
+	<div class="panel-body text-center">
+		<img src="{{ plugins.profile.avatar(user, 175) }}" alt="{{ user.firstname }} {{ user.lastname }}" class="img img-circle">
+		<a href="{{ url_for('profile:home', username=user.username) }}"><h3>{{ user.firstname }} {{ user.lastname }}</h3></a>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis autem ad voluptatum?</p>
+		{% set show = True %}
+        {% if auth.exists %}
+          {% set show = auth.user.id != user.id %}
+        {% endif %}
+        {% if show %}
+          {% if not plugins.profile.following(user.id, auth.user.id) %}
+          <a href="{{ url_for('profile:follow', username=user.username) }}" class="btn btn-success btn-fluid btn-sm pull-right"><i class="fa fa-fw fa-user-plus"></i> Follow</a>
+          {% else %}
+          <a href="{{ url_for('profile:unfollow', username=user.username) }}" class="btn btn-danger btn-fluid btn-sm pull-right"><i class="fa fa-fw fa-user-times"></i> Unfollow</a>
+          {% endif %}
+        {% endif %}
+	</div>
+</div>

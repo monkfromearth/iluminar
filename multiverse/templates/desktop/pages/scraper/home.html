@@ -1,0 +1,58 @@
+{% extends 'desktop/base.html' %}
+
+{% block title %}
+Scraper
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<form action="{{ url_for('scraper:home') }}" method="POST" autocomplete="off">
+				<div class="form-group">
+					<label for="url">URL</label>
+					<input type="url" name="url" id="url" placeholder="Enter your URL" value="{{ url }}" class="form-control">
+				</div>
+				<div class="form-group">
+					<select name="agent" id="agent" class="form-control">
+						<option value="coursera">Coursera</option>
+						<option value="udacity">Udacity</option>
+						<option value="udemy">Udemy</option>
+					</select>
+				</div>
+				<input type="hidden" name="csrf_token" value="{{ platform.CSRF_TOKEN }}">
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary"><i class="fa fa-fw fa-paper-plane"></i> Fetch</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% if result|length > 0 %}
+<div class="container">
+	<div class="row col-center">
+		<div class="col-lg-6 col-md-6">
+			<h2>{{ result.title }}</h2>
+			<p class="lead">Stars: {{ result.ratings.rating }}, {{ result.ratings.total_ratings }} Ratings, {{ result.ratings.total_reviews }} Reviews, {{ result.length }}</p>
+			<p>{{ result.effort }}</p>
+			<p>{{ result.about }}</p>
+			<div class="form-group">
+				{% for c in result.content %}
+				<h3>{{ c.heading }}</h3>
+				<p>{{ c.description }}</p>
+				{% endfor %}
+			</div>
+			<div class="form-group">
+				{% for i in result.instructors %}
+				<span>
+					<img src="{{ i.source }}" alt="{{ i.name }}" class="img img-circle">
+					<p class="lead">{{ i.name }}</p>
+					<p>{{ i.position }}</p>
+				</span>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}
+{% endblock %}

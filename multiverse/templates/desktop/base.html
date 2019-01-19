@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	<meta charset="UTF-8"><meta name="X-XSS-Protection" content="1;mode=block">
+	<link href="https://fonts.googleapis.com/css?family=Lato:400,700|Montserrat:400,700|Raleway:500|Lora:400,700" rel="stylesheet">
+	<link rel="apple-touch-icon" sizes="57x57" href="/assets/images/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/assets/images/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/assets/images/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/assets/images/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/assets/images/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/assets/images/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/assets/images/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/assets/images/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="/assets/images/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/assets/images/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
+	<link rel="manifest" href="/assets/images/manifest.json">
+	<meta name="msapplication-TileColor" content="#e7e7e7">
+	<meta name="msapplication-TileImage" content="/assets/images/ms-icon-144x144.png">
+	<meta name="theme-color" content="#e7e7e7">
+	<link rel="stylesheet" href="{{ url_for('static', filename='vendors/nprogress/nprogress.min.css') }}">
+	<link href="{{ url_for('static', filename='css/global/bootstrap.min.css') }}" rel="stylesheet">
+	<link href="{{ url_for('static', filename='css/global/repo.css') }}" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<meta name="csrf_token" content="{{ platform.CSRF_TOKEN }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='vendors/bootstrap-select/bootstrap-select.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/global/canvas.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='vendors/emoji-picker/emoji.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='vendors/bootstrap-suggest/bootstrap-suggest.css') }}">
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]--> 
+</head>
+<body>
+	<span id="header">{% block header %}{% endblock %}</span>
+	{% include "desktop/modules/navbar.html" with context %}
+	<script src="{{ url_for('static', filename='vendors/nprogress/nprogress.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/global/jquery.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/global/bootstrap.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/global/bucket.js') }}"></script>
+	<script src="{{ url_for('static', filename='vendors/bootstrap-select/bootstrap-select.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='vendors/emoji-picker/config.js') }}"></script>
+	<script src="{{ url_for('static', filename='vendors/emoji-picker/util.js') }}"></script>
+	<script src="{{ url_for('static', filename='vendors/emoji-picker/jquery.emojiarea.js') }}"></script>
+	<script src="{{ url_for('static', filename='vendors/emoji-picker/emoji-picker.js') }}"></script>
+	<script src="{{ url_for('static', filename='vendors/bootstrap-suggest/bootstrap-suggest.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/global/repo.js') }}"></script>
+	<span id="universe">{% block content %}{% endblock %}</span>
+	<span id="footer">{% block footer %}{% endblock %}</span>
+</body>
+</html>

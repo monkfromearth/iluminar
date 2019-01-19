@@ -1,0 +1,74 @@
+{% extends 'desktop/base.html' %}
+
+{% block title %}
+Sign in
+{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/desktop/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container skyscraper vcenter-p">
+	<div class="row">
+		<div class="col-lg-5 col-md-5 vcenter-c col-center">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					Sign in to {{ configs.SITE_NAME }}
+				</div>
+				<div class="panel-body text-center">
+					<form method="POST" class="form" id="signin-form">
+						<div class="form-group input-group">
+							<span class="input-group-addon"><i class="fa fa-fw fa-at"></i></span>
+							<input name="email" type="email" class="form-control" id="signin-email" placeholder="Your Email Address" value="{{ email }}" autofocus required maxlength="128">
+						</div>
+						<div class="form-group input-group">
+							<span class="input-group-addon"><i class="fa fa-fw fa-lock"></i></span>
+							<input type="password" name="passwd" id="signin-passwd" class="form-control" placeholder="Your Password" value="" required>
+						</div>
+						<div class="text-right">
+							<a href="{{ url_for('reset:request') }}"><i class="fa fa-fw fa-refresh"></i> Reset Password</a>
+						</div>
+						<input type="hidden" name="csrf_token" id="signin-token" value="{{ platform.CSRF_TOKEN }}">
+						<div class="form-group text-center">
+							<button class="btn btn-success btn-fluid " type="submit" id="signin-submit"><i class="fa fa-fw fa-sign-in"></i> Sign in</button>
+						</div>
+						{% with messages = get_flashed_messages(with_categories=true) %}
+							{% if messages %}
+								{% for category, message in messages %}
+									<div class="alert alert-{{ category }}">
+										<p>{{ message }}</p>
+									</div>
+								{% endfor %}
+							{% endif %}
+						{% endwith %}
+					</form>
+					<hr>
+					<p>
+						or connect using these
+					</p>
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<div class="form-group">
+								<a class="base-link btn google-btn btn-fluid btn-block" href="{{ oauth.google }}"><i class="fa fa-fw fa-google"></i>Google</a>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6">
+							<div class="form-group">
+								<a class="base-link btn facebook-btn btn-fluid btn-block" href="{{ oauth.facebook }}"><i class="fa fa-fw fa-facebook"></i> Facebook</a>
+							</div>
+						</div>
+					</div>
+					<p class="text-muted small">
+						By signing in, you agree to our <a href="{{ url_for('terms') }}">Terms of Service</a>, and <a href="{{ url_for('privacy') }}">Privacy Policy</a>.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<script src="{{ url_for('static', filename='js/desktop/signin.js') }}"></script>
+{% endblock %}

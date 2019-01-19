@@ -1,0 +1,22 @@
+<div class="media stack-minimal">
+  <div class="media-left">
+    <img src="{{ plugins.profile.avatar(user, 42) }}" class="media-object">
+  </div>
+  <div class="media-body">
+    <h4 class="media-heading">
+    	<a href="{{ url_for('profile:home', username=user.username) }}" class="stack-minimal-user">{{ user.firstname }} {{ user.lastname }}</a>
+        {% set show = True %}
+        {% if auth.exists %}
+          {% set show = auth.user.id != user.id %}
+        {% endif %}
+        {% if show %}
+          {% if not plugins.profile.following(user.id, auth.user.id) %}
+          <a href="{{ url_for('profile:follow', username=user.username) }}" class="base-link btn btn-success btn-fluid btn-sm pull-right"><i class="fa fa-fw fa-user-plus"></i> Follow</a>
+          {% else %}
+          <a href="{{ url_for('profile:unfollow', username=user.username) }}" class="base-link btn btn-danger btn-fluid btn-sm pull-right"><i class="fa fa-fw fa-user-times"></i> Unfollow</a>
+          {% endif %}
+        {% endif %}
+    </h4>
+    <p class="small">(@{{ user.username }})</p>
+  </div>
+</div>

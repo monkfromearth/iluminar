@@ -1,0 +1,69 @@
+<div class="row profile-header">
+	<div class="col-lg-3 col-md-3">
+		<img src="{{ plugins.profile.avatar(user, 175) }}" alt="{{ user.firstname }} {{ user.lastname }}'s Profile Picture" class="img img-circle">
+	</div>
+	<div class="col-lg-9 col-md-9">
+		<h1>{{ user.firstname }} {{ user.lastname }}</h1>
+		<p class="lead">@{{ user.username }}</p>
+		<p style="min-height:3em;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis autem cum unde.</p>
+		<div>
+			<div class="row">
+				<div class="col-lg-11 col-md-11">
+					<ul class="nav nav-pills">
+						{% set show = True %}
+						{% if auth.exists %}
+							{% set show = auth.user.id != user.id %}
+						{% endif %}
+						{% if show %}
+							{% if not plugins.profile.following(user.id, auth.user.id) %}
+							<li><a href="{{ url_for('profile:follow', username=user.username) }}" class="follow-btn base-link"><i class="fa fa-fw fa-user-plus"></i> Follow</a></li>
+							{% else %}
+							<li><a href="{{ url_for('profile:unfollow', username=user.username) }}" class="unfollow-btn base-link"><i class="fa fa-fw fa-user-times"></i> Unfollow</a></li>
+							{% endif %}
+						<li><a href="#" class="base-link"><i class="fa fa-fw fa-comment"></i> Message</a></li>
+						{% endif %}
+					</ul>
+				</div>
+				<div class="col-lg-1 col-md-1">
+					<div class="dropdown pull-right">
+					  <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-fw fa-ellipsis-h fa-lg"></i></button>
+					  <ul class="dropdown-menu">
+					    {% if show %}
+						<li><a href="#"><i class="fa fa-fw fa-user-times"></i> Block</a></li>
+					    <li><a href="#"><i class="fa fa-fw fa-flag"></i> Report</a></li>
+					    <li class="divider"></li>
+					    {% endif %}
+					  	<li class="dropdown-header">Other</li>
+					    <li><a href="#"><i class="fa fa-fw fa-facebook"></i> View on Facebook</a></li>
+					    <li><a href="#"><i class="fa fa-fw fa-twitter"></i> View on Twitter</a></li>
+					    <li><a href="#"><i class="fa fa-fw fa-instagram"></i> View on Instagram</a></li>
+					    <li><a href="#"><i class="fa fa-fw fa-linkedin"></i> View on LinkedIn</a></li>
+					  </ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<hr id="profile-navbar-upper-hr">
+<ul class="nav nav-pills" id="profile-navbar">
+	<li {% if request.endpoint == 'profile:home' %}class="active"{% endif %}>
+		<a href="{{ url_for('profile:home', username=user.username) }}" data-tblock="profile_posts" data-tblockTarget="#profile-content">
+			<span class="profile-navbar-count text-info">{{ plugins.helper.numberToHumanFormat(plugins.profile.postCount(user.id)) }}</span><br/>
+			Posts
+		</a>
+	</li>
+	<li {% if request.endpoint == 'profile:followers' %}class="active"{% endif %}>
+		<a href="{{ url_for('profile:followers', username=user.username) }}" data-tblock="profile_followers" data-tblockTarget="#profile-content">
+			<span class="profile-navbar-count text-info">{{ plugins.helper.numberToHumanFormat(plugins.profile.followerCount(user.id)) }}</span><br/>
+			Followers
+		</a>
+	</li>
+	<li {% if request.endpoint == 'profile:following' %}class="active"{% endif %}>
+		<a href="{{ url_for('profile:following', username=user.username) }}" data-tblock="profile_following" data-tblockTarget="#profile-content">
+			<span class="profile-navbar-count text-info">{{ plugins.helper.numberToHumanFormat(plugins.profile.followerCount(user.id, 'following')) }}</span><br/>
+			Following
+		</a>
+	</li>
+</ul>
+<hr id="profile-navbar-lower-hr">

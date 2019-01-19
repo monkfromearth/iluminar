@@ -1,0 +1,109 @@
+<div class="panel panel-default post" id="{{ post.post.id }}">
+	<div class="panel-body">
+		<div class="media post-header">
+		  <div class="media-left">
+		    <img src="{{ plugins.profile.avatar(post.user, 42) }}" class="media-object img-circle">
+		  </div>
+		  <div class="media-body">
+		    <div class="media-heading">
+		    	<a href="{{ url_for('profile:home', username=post.user.username) }}" class="post-name">{{ post.user.firstname }} {{ post.user.lastname }}</a>
+		    	<div class="dropdown pull-right">
+				  <button class="btn btn-sm btn-link dropdown-toggle post-dropdown" type="button" data-toggle="dropdown">
+		  			<i class="fa fa-fw fa-lg fa-ellipsis-h"></i>
+				  </button>
+				  <ul class="dropdown-menu post-dropdown">
+				    <li><a href="{{ url_for('bookmark:create', post=post.post.id) }}" class="post-bookmark-create base-link"><i class="fa fa-fw fa-lg fa-bookmark-o"></i> Save</a></li>
+				    {% if auth.exists and auth.user.id == post.post.user %}
+				    <li><a href="{{ url_for('post:edit', post=post.post.id) }}" class="post-edit base-link"><i class="fa fa-fw fa-lg fa-edit"></i> Edit</a></li>
+				    <li><a href="{{ url_for('post:remove', post=post.post.id) }}" class="post-remove base-link"><i class="fa fa-fw fa-lg fa-trash"></i> Remove</a></li>
+				    {% endif %}
+				  </ul>
+				</div>
+		    </div>
+		    <p class="small help-block">@{{ post.user.username }}</p>
+		  </div>
+		</div>
+		<div class="post-content">
+			<div class="form-group post-text">
+				{% autoescape false %}
+					{{ plugins.model.stripMarkdown(post.post.content) }}
+				{% endautoescape %}
+			</div>
+			{% if post.pinfo.attached|length > 1 %}
+			<div class="form-group text-center post-media">
+				{% if post.pinfo.type == 'media' %}
+					{% if post.attached.kind == 'image' %}
+						<img src="{{ post.attached.name }}" alt="{{ post.user.firstname }} {{ post.user.lastname }}'s Picture" class="img post-media-raw">
+					{% elif post.attached.kind == 'video' %}
+						<video src="{{ post.attached.name }}" alt="{{ post.user.firstname }} {{ post.user.lastname }}'s Video" class="post-media-raw" controls>
+					{% elif post.attached.kind == 'audio' %}
+						<audio src="{{ post.attached.name }}" alt="{{ post.user.firstname }} {{ post.user.lastname }}'s Song" class="post-media-raw" controls>
+					{% endif %}
+				{% elif post.pinfo.type == 'canvas' %}
+					{% include 'desktop/modules/canvas.html' with context %}
+				{% endif %}
+			</div>
+			{% endif %}
+			<div class="container">
+				<p class="post-meta help-block">
+					<span class="small post-timestamp">
+						<i class="fa fa-fw fa-clock-o"></i> {{ plugins.helper.getTimestamp(post.post.created) }}
+					</span>
+					<span class="small post-audience">
+						{% set audience = post.pinfo.audience %}
+						{% if audience == 'everyone' %}
+							<i class="fa fa-fw fa-globe"></i> Everyone
+						{% elif everyone == 'followers' %}
+							<i class="fa fa-fw fa-users"></i> Followers
+						{% elif everyone == 'onlyme' %}
+							<i class="fa fa-fw fa-lock"></i> Only Me
+						{% endif %}
+					</span>
+			    </p>
+			</div>
+		</div>
+	</div>
+	<div class="panel-footer">
+		<div class="row text-center">
+			<div class="col-lg-4 col-md-4">
+				{% set reaction = plugins.model.hasVoted(post.post.id, auth.user.id) %}
+				{% if not reaction %}
+				<button type="button" class="btn btn-link btn-sm post-reactions">
+					<i class="fa fa-fw fa-lg fa-long-arrow-up"></i> Upvote
+				</button>
+				{% else %}
+				<button type="button" class="btn btn-link btn-sm post-reactions" style="color:{{ plugins.model.reactionColors.get(reaction|lower)  }};">
+					<img src="/assets/images/reactions/{{ reaction|lower }}.24.png" alt="{{ reaction }}" class="img" /> {{ reaction }}
+				</button>
+				{% endif %}
+			</div>
+			<div class="col-lg-4 col-md-4">
+				<button type="button" class="btn btn-link btn-sm post-comments">
+					<i class="fa fa-fw fa-comment-o"></i> Comments
+				</button>
+			</div>
+			<div class="col-lg-4 col-md-4">
+				<a href="#" class="btn btn-link btn-sm post-repost btn-link hidden">
+					<i class="fa fa-fw fa-share"></i> Repost
+				</a>
+				<a href="#" class="btn btn-link btn-sm post-open btn-link">
+					<i class="fa fa-fw fa-external-link"></i> Open
+				</a>
+			</div>
+		</div>
+		<div class="media comment-form visible-none">
+		  <div class="media-left">
+		    <img src="{{ plugins.profile.avatar(auth.user, 32) }}" class="img img-circle media-object">
+		  </div>
+		  <div class="media-body">
+		    <form action="#" method="POST" accept-charset="UTF-8">
+				<div class="input-group">
+					<input type="text" name="comment" class="form-control input-sm mention" placeholder="Write your comment">
+					<span class="input-group-btn"><button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-fw fa-comment"></i> Post</button></span>
+				</div>
+				<input type="hidden" name="csrf_token" value="{{ platform.CSRF_TOKEN }}">
+			</form>
+		  </div>
+		</div>
+	</div>
+</div>

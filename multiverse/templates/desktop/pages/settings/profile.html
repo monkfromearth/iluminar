@@ -1,0 +1,104 @@
+{% extends 'desktop/base.html' %}
+
+{% block title %}
+Profile Settings
+{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/desktop/settings.css') }}">
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+	<div class="col-lg-3 col-md-3">
+		{% with user = auth.user %}
+			{% include "desktop/modules/stack.html" %}
+		{% endwith %}
+		<ul class="nav nav-pills nav-stacked">
+			<li {% if request.endpoint == 'settings:profile' %}class="active"{% endif %}><a href="#" class="base-link"><i class="fa fa-fw fa-user-circle-o"></i> Profile</a></li>
+			<li {% if request.endpoint == 'settings:privacy' %}class="active"{% endif %}><a href="#" class="base-link"><i class="fa fa-fw fa-lock"></i> Privacy</a></li>
+		</ul>
+	</div>
+	<div class="col-lg-6 col-md-6">
+		<h2>Profile Settings</h2>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Profile Picture
+				<button type="button" class="panel-btn btn btn-default btn-sm pull-right" data-open="1">
+					<i class="fa fa-fw fa-minus"></i>
+				</button>
+			</div>
+			<div class="panel-body">
+				
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Identity
+				<button type="button" class="panel-btn btn btn-default btn-sm pull-right" data-open="1">
+					<i class="fa fa-fw fa-minus"></i>
+				</button>
+			</div>
+			<div class="panel-body">
+				<form action="" method="POST" autocomplete="off">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-lg-6 col-md-6">
+								<label for="firstname">Firstname</label>
+								<div class="form-group input-group">
+									<span class="input-group-addon"><i class="fa fa-fw fa-user"></i></span>
+									<input name="firstname" type="text" class="form-control" placeholder="Your First Name" value="{{ auth.user.firstname }}">
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6">
+								<label for="lastname">Lastname</label>
+								<div class="form-group input-group">
+									<span class="input-group-addon"><i class="fa fa-fw fa-user"></i></span>
+									<input name="lastname" type="text" class="form-control" placeholder="Your Last Name" value="{{ auth.user.lastname }}">
+								</div>
+							</div>
+						</div>
+					</div>
+					<label for="email">Email Address</label>
+					<div class="form-group input-group">
+						<span class="input-group-addon"><i class="fa fa-fw fa-at"></i></span>
+						<input type="email" name="email" class="form-control" placeholder="Your Email Address" value="{{ auth.user.email }}" readonly>
+					</div>
+					<div class="form-group"></div>
+				</form>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				About You
+				<button type="button" class="panel-btn btn btn-default btn-sm pull-right" data-open="1">
+					<i class="fa fa-fw fa-minus"></i>
+				</button>
+			</div>
+			<div class="panel-body">
+				<form action="" method="POST">
+					<div class="form-group">
+						<label for="gender">Gender</label><br/>
+						<label for="gender" class="radio-inline"><input type="radio" name="gender" value="male">Male</label>
+						<label for="gender" class="radio-inline"><input type="radio" name="gender" value="female">Female</label>
+					</div>
+					<div class="form-group">
+						<label for="bio">Bio</label>
+						<textarea name="bio" id="" cols="30" rows="3" class="form-control" placeholder="Something about you"></textarea>
+					</div>
+					<div class="form-group text-right">
+						<button class="btn btn-sm btn-primary">
+							<i class="fa fa-fw fa-save"></i> Save
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<script src="{{ url_for('static', filename='js/desktop/settings.js') }}"></script>
+{% endblock %}

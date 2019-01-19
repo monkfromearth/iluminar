@@ -1,0 +1,59 @@
+{% extends 'desktop/base.html' %}
+
+{% block title %}
+Followers | {{ user.firstname }} {{ user.lastname }} (@{{ user.username }})
+{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/desktop/profile.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/desktop/post.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-lg-10 col-md-10 col-center">
+			{% include 'desktop/pages/profile/modules/header.html' with context %}
+		</div>
+	</div>
+	<span id="profile-content">
+	{% block profile_followers %}
+		<div class="row">
+			<div class="col-lg-6 col-md-6 col-center">
+				{% with messages = get_flashed_messages(with_categories=true) %}
+					{% if messages %}
+						{% for category, message in messages %}
+							<div class="alert alert-{{ category }}">
+								<p>{{ message }}</p>
+							</div>
+						{% endfor %}
+					{% endif %}
+				{% endwith %}
+				<div class="container-fluid">
+					{% if followers|length > 0 %}
+					{% for follower in followers %}
+							{% with user = follower %}
+								{% include 'desktop/modules/stack.minimal.html' %}
+							{% endwith %}
+						{% endfor %}
+					{% else %}
+						<p class="text-center">
+							{% if auth.exists and auth.user.id == user.id %}
+								You don't have any followers!
+							{% else %}
+								{{ user.firstname }} doesn't have any followers.
+							{% endif %}
+						</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	{% endblock %}
+	</span>
+</div>
+{% endblock %}
+
+{% block footer %}
+<script src="{{ url_for('static', filename='js/desktop/profile.js') }}"></script>
+<script src="{{ url_for('static', filename='js/desktop/post.js') }}"></script>
+{% endblock %}
