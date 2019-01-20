@@ -37,6 +37,11 @@ h1, h2, h3, h4 {
 	min-height:calc(100vh - 60px);
 }
 
+.small-skyscraper {
+	min-height:calc(80% - 60px);
+	min-height:calc(80vh - 60px);
+}
+
 .vcenter-p {
 	position:relative;
 }

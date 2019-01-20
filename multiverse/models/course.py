@@ -4,7 +4,29 @@ from libraries.neumann import DB
 
 class Course:
 
-	table = 'course'
+	table = 'courses'
+
+	@staticmethod
+	def search(props):
+		status = False; content = {}
+		try:
+			query = props.get('query', '')
+			fields = props.get('fields', ['*'])
+			if len(query) == 0:
+				raise MVCError('REQUEST:ERROR:EMPTY_INPUT')
+			db = DB.connect()
+			result = db.getAll(Course.table, fields, ('LOWER(title) LIKE LOWER(%s)', [ '%' + query + '%' ]))
+			db.end()
+			status = result is not None
+			if status:
+				content['code'] = 'PLATFORM:SUCCESS:DB_DATA_FOUND'
+				content['result'] = DB.tupleToDict(result)
+			else:
+				content['code'] = 'PLATFORM:SUCCESS:DB_DATA_NOT_FOUND'
+				content['result'] = []
+		except MVCError as e:  content['code'] = str(e)
+		except Exception as e: MVCError.catch(e)
+		return Repo.api('models:courses#search', status, content)
 
 	@staticmethod
 	def create(props):
@@ -26,6 +48,7 @@ class Course:
 			status = rowsInserted == 1
 			if status:
 				content['code'] = 'PLATFORM:SUCCESS:DB_DATA_CREATED'
+				info['id'] = db.lastId()
 				content['info'] = info
 			else:
 				content['code'] = 'PLATFORM:ERROR:DB_UNKNOWN'
@@ -101,7 +124,7 @@ class Course:
 				raise MVCError('REQUEST:ERROR:EMPTY_INPUT')
 			created = Repo.time()
 			db = DB.connect()
-			if 
+			#if 
 			rowsDeleted = db.insert(Course.table, (''))
 			db.end()
 			status = rowsInserted == 1

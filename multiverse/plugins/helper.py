@@ -46,3 +46,13 @@ class Helper:
 		for url in urls: 
 			l += [ (url, 'http://' + url if len(urlparse(url).scheme) == 0 else url) ]
 		return l
+
+	@staticmethod
+	def getDomain(link):
+		result = urlparse(link)
+		if result.netloc == 'udemy.com' or result.netloc == 'www.udemy.com':
+			return 'udemy'
+		elif result.netloc == 'udacity.com' or result.netloc == 'www.udacity.com':
+			return 'udacity'
+		elif result.netloc == 'coursera.org' or result.netloc == 'www.coursera.org':
+			return 'coursera'

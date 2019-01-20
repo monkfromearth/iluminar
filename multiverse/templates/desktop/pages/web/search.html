@@ -10,75 +10,94 @@ You searched for "{{ query }}"
 
 {% block content %}
 <div class="container">
-	<div class="col-lg-3 col-md-3">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				Search Filters
-				<button type="button" class="panel-btn btn btn-default btn-sm pull-right" data-open="1">
-					<i class="fa fa-fw fa-minus"></i>
-				</button>
-			</div>
-			<div class="panel-body">
-				<div class="form-group">
-					<label>Source</label>
-					<select name="source" id="" class="selectpicker" data-size="2" data-style="btn-default btn-sm" data-width="100%">
-						<option value="user" selected> User</option>
-						<option value="post"> Post</option>
-					</select>
+	<div class="row">
+			<div class="col-lg-3 col-md-3">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					Search Filters
 				</div>
-				<div class="form-group">
-					<label>Post Type</label>
-					<select id="" data-size="3" class="selectpicker" data-style="btn-default btn-sm" data-width="100%">
-						<option value="text" data-icon="fa fa-fw fa-font">Text</option>
-						<option value="media" data-icon="fa fa-fw fa-camera-retro">Media</option>
-						<option value="canvas" data-icon="fa fa-fw fa-quote-left">Canvas</option>
-					</select>
-				</div>
-				<div class="form-group">
-					<label>Media Type</label>
-					<select id="" data-size="3" class="selectpicker" data-style="btn-default btn-sm" data-width="100%">
-						<option value="image" data-icon="fa fa-fw fa-camera-retro">Picture</option>
-						<option value="audio" data-icon="fa fa-fw fa-headphones">Songs</option>
-						<option value="video" data-icon="fa fa-fw fa-video-camera">Video</option>
-					</select>
+				<div class="panel-body">
+					<div class="form-group">
+						<label>Career Track</label>
+						<select name="source" id="" class="selectpicker" data-size="3" data-style="btn-primary" data-width="100%">
+							<option value="beginner" selected> Beginner</option>
+							<option value="learner"> Learner</option>
+							<option value="professional"> Professional</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Kind of Course</label>
+						<select name="source" id="" class="selectpicker" data-size="3" data-style="btn-primary" data-width="100%">
+							<option value="free" selected> Free</option>
+							<option value="paid"> Paid</option>
+							<option value="all"> All</option>
+						</select>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="col-lg-6 col-md-6">
-		<h2>You searched for "{{ query }}"</h2><br>
-		{% with messages = get_flashed_messages(with_categories=true) %}
-			{% if messages %}
-				{% for category, message in messages %}
-					<div class="alert alert-{{ category }}">
-						<p>{{ message }}</p>
+		<div class="col-lg-6 col-md-6">
+			<h2>You searched for "{{ query }}"</h2><br>
+			{% with messages = get_flashed_messages(with_categories=true) %}
+				{% if messages %}
+					{% for category, message in messages %}
+						<div class="alert alert-{{ category }}">
+							<p>{{ message }}</p>
+						</div>
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
+			{% block search_content %}
+			<form action="{{ url_for('search') }}" method="GET" autocomplete="off">
+				<div class="form-group input-group">
+					<input type="hidden" value="all" name="kind">
+					<input type="search" name="q" id="search-bar" class="form-control input-lg" placeholder="Search the course" size="75" value="{{ query}}">
+					<span class="input-group-btn"><button class="btn btn-default btn-lg"><i class="fa fa-fw fa-search fa-lg"></i></button></span>
+				</div>
+			</form>
+			{% if result|length > 0 %}
+				{% for course in result[::-1] %}
+					<div class="panel panel-default course">
+						<div class="panel-body">
+							<div class="media">
+							  <div class="media-left">
+							  	{% set partner = plugins.helper.getDomain(course.link) %}
+							    <img src="{{ url_for('static', filename='images/'+ partner +'.jpg') }}" class="img img-thumbnail media-object" style="width:60px">
+							  </div>
+							  <div class="media-body">
+							    <h4 class="media-heading"><a href="{{ course.link }}" target="_blank">{{ course.title }}</a></h4>
+							    <p class="help-block">Powered by <b>{{ partner|title  }}</b></p>
+							    {% if partner == 'coursera' or partner == 'udemy' %}
+								<button class="btn btn-primary btn-sm learn-more" type="button" data-link="{{ course.link }}" data-title="{{ course.title }}" data-partner="{{ partner }}"><i class="fa fa-fw fa-search"></i> Learn More</button>
+							    {% endif %}
+							  </div>
+							</div>
+						</div>
 					</div>
 				{% endfor %}
+			{% else %}
+				<p class="text-center">
+					We couldn't find any course that matched the search.
+				</p>
 			{% endif %}
-		{% endwith %}
-		{% block search_content %}
-			{% if source == 'user' %}
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<i class="fa fa-fw fa-users"></i> Users
-					</div>
-					<div class="panel-body">
-						{% if result|length > 0 %}
-							{% for user in result %}
-								{% with user = user %}
-									{% include 'desktop/modules/stack.minimal.html' %}
-								{% endwith %}
-							{% endfor %}
-						{% else %}
-							<p class="text-center">
-								We couldn't find any user the matched the post.
-							</p>
-						{% endif %}
-					</div>
-				</div>
-			{% endif %}
-		{% endblock %}
+			{% endblock %}
+		</div>
+		<div class="col-lg-3 col-md-3"></div>
 	</div>
-	<div class="col-lg-3 col-md-3"></div>
+</div>
+<div id="learnMoreModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

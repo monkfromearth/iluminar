@@ -16,14 +16,14 @@ class Udacity:
 		
 		data['title'] = soup.findAll('h1')[0].text
 
-		findingAbout = soup.findAll('p', {'class':'description'})
-		if len(findingAbout) > 0:
-			pass
-		elif len(soup.findAll('p', {'class':'summary'})) > 0:
-			findingAbout = soup.findAll('p', {'class':'summary'})
-		elif len(soup.findAll('div', {'class':'content'})) > 0:
-			findingAbout = soup.findAll('div', {'class':'overlay'})[0].findChildren(('div', {'class':'content'}))[0].findChildren('p')
-		data['about'] = findingAbout[0].text
+		# findingAbout = soup.findAll('p', {'class':'description'})
+		# if len(findingAbout) > 0:
+		# 	pass
+		# elif len(soup.findAll('p', {'class':'summary'})) > 0:
+		# 	findingAbout = soup.findAll('p', {'class':'summary'})
+		# elif len(soup.findAll('div', {'class':'content'})) > 0:
+		# 	findingAbout = soup.findAll('div', {'class':'overlay'})[0].findChildren(('div', {'class':'content'}))[0].findChildren('p')
+		# data['about'] = findingAbout[0].text
 		
 		data['ratings']['rating'] = soup.findAll('span', {'class':'stats__average__rating'})[0].text if len(soup.findAll('span', {'class':'stats__average__rating'})) > 0 else None # Rating
 		
@@ -55,19 +55,19 @@ class Udacity:
 		else:
 			data['ratings']['total_reviews'] = None
 		
-		gettingSyllabus = soup.findAll('ir-term-details', {'class':'pricing-card-content'})
-		if len(gettingSyllabus) > 0:
-			gettingSyllabus = gettingSyllabus[0].findChildren('ul', {'class':'card_body'})[0].findChildren('li')
-			for m in gettingSyllabus:
-				heading = m.findChildren("h5")[0].text
-				text = m.findChildren("p")[0].text
-				data['content'].append({'heading':heading, 'description':text})
-		else:
-			gettingSyllabus = soup.findAll('section', {'class':'degree-syllabus-preview__content--parts'})[0].findChildren('li', {'class':'ng-star-inserted'})
-			for m in gettingSyllabus:
-				heading = m.findChildren("h4")[0].text
-				text = m.findChildren("p")[0].text
-				data['content'].append({'heading':heading, 'description':text})
+		# gettingSyllabus = soup.findAll('ir-term-details', {'class':'pricing-card-content'})
+		# if len(gettingSyllabus) > 0:
+		# 	gettingSyllabus = gettingSyllabus[0].findChildren('ul', {'class':'card_body'})[0].findChildren('li')
+		# 	for m in gettingSyllabus:
+		# 		heading = m.findChildren("h5")[0].text
+		# 		text = m.findChildren("p")[0].text
+		# 		data['content'].append({'heading':heading, 'description':text})
+		# else:
+		# 	gettingSyllabus = soup.findAll('section', {'class':'degree-syllabus-preview__content--parts'})[0].findChildren('li', {'class':'ng-star-inserted'})
+		# 	for m in gettingSyllabus:
+		# 		heading = m.findChildren("h4")[0].text
+		# 		text = m.findChildren("p")[0].text
+		# 		data['content'].append({'heading':heading, 'description':text})
 		return data
 
 	@staticmethod

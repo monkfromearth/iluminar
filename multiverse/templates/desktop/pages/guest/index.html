@@ -12,10 +12,13 @@ Hey there!
 <div class="skyscraper container-fluid vcenter-p" id="header">
 	<div class="text-center hcenter vcenter-c">
 		<h1 class="brand"><img src="{{ url_for('static', filename='images/iluminar.128.png') }}" alt="" class="img"> iLuminar</h1>
-		<div class="form-group input-group">
-			<input type="search" name="" id="" class="form-control input-lg" placeholder="Search the course" size="75">
-			<span class="input-group-btn"><button class="btn btn-default btn-lg"><i class="fa fa-fw fa-search fa-lg"></i></button></span>
-		</div>
+		<form action="{{ url_for('search') }}" method="GET" autocomplete="off">
+			<div class="form-group input-group">
+				<!-- <input type="hidden" value="{{ platform.CSRF_TOKEN }}" name="csrf_token"> -->
+				<input type="search" name="q" id="search-bar" class="form-control input-lg" placeholder="Search the course" size="75" value="{{ query}}">
+				<span class="input-group-btn"><button class="btn btn-default btn-lg"><i class="fa fa-fw fa-search fa-lg"></i></button></span>
+			</div>
+		</form>
 	</div>
 </div>
 {% endblock %}

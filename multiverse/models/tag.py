@@ -4,7 +4,7 @@ from libraries.repo import Repo
 
 class Tag:
 
-	table = 'tag'
+	table = 'tags'
 
 	@staticmethod
 	def create(props):
@@ -19,7 +19,7 @@ class Tag:
 				'created':created
 			}
 			db = DB.connect()
-			rowsInserted = db.insert(Course.table, info)
+			rowsInserted = db.insert(Tag.table, info)
 			db.end()
 			status = rowsInserted == 1
 			if status:
@@ -36,11 +36,14 @@ class Tag:
 		status = False; content = {}
 		try:
 			id = props.get('id', '')
+			name = props.get('name', '')
 			db = DB.connect()
-			if len(id) == 0:
-				result = db.getAll(Tag.table, ['*'])
+			if len(id) != 0:
+				result = db.getOne(Tag.table, ['*'], ('id = %s', [ id ]))
+			elif len(name) != 0:
+				result = db.getOne(Tag.table, ['*'], ('name = %s', [ name ]))
 			else:			
-				result = db.getAll(Tag.table, ['*'], ('id = %s', [ id ]))
+				result = db.getAll(Tag.table, ['*'])
 			db.end()
 			status = result is not None
 			if status:

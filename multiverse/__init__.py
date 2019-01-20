@@ -51,9 +51,13 @@ route('/', 'index', HomeController.index, methods=['GET', 'POST'])
 route('/privacy', 'privacy', HomeController.privacy)
 route('/terms', 'terms', HomeController.tos)
 
-route('/scraper/home', 'scraper:home', ScraperController.home, methods=['POST', 'GET'])
+route('/search', 'search', HomeController.search, methods=['GET', 'POST'])
 
-route('/database/manage', 'database:manage', ScraperController.database_manage, methods=['GET', 'POST'])
+route('/scraper/query', 'scraper:query', ScraperController.query, methods=['POST', 'GET'])
+
+route('/scraper/move', 'scraper:move', ScraperController.scrapToDatabase, methods=['GET', 'POST'])
+
+route('/ajax/query', 'ajax:query', HomeController.query, methods=['GET'])
 
 # Error Routes
 

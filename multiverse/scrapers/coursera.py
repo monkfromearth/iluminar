@@ -25,8 +25,8 @@ class Coursera:
 			l = e.findAll(text=True)
 			instructor['position'] = "%s, %s" % (l[2], l[4])
 			data['instructors'].append(instructor)
-		data['length'] = int(''.join(filter(str.isdigit, map(str, soup.findChildren('div', {'class':'ProductGlance'})[0].findChildren('div', recursive=False)[2].findChildren('h4')[0].text.split()))))
-		data['effort'] = soup.findChildren('div', {'class':'ProductGlance'})[0].findChildren('div', recursive=False)[2].findChildren('div', recursive=False)[1].findChildren('div', recursive=False)[0].findChildren('div', recursive=False)[0].findChildren('span', recursive=False)[0].findChildren('span', recursive=False)[1].text
+		data['length'] = ''.join(filter(str.isdigit, map(str, soup.findChildren('div', {'class':'ProductGlance'})[0].findChildren('div', recursive=False)[2].findChildren('h4')[0].text.split())))
+		#data['effort'] = soup.findChildren('div', {'class':'ProductGlance'})[0].findChildren('div', recursive=False)[2].findChildren('div', recursive=False)[1].findChildren('div', recursive=False)[0].findChildren('div', recursive=False)[0].findChildren('span', recursive=False)[0].findChildren('span', recursive=False)[1].text if len(soup.findChildren('div', {'class':'ProductGlance'})) > 0 else ''
 		data['title'] = soup.findAll('h1')[1].text
 		data['additional'] = {
 			'partner':soup.findAll('div', {'class':'Banner'})[0].findChildren('img')[0]['title']

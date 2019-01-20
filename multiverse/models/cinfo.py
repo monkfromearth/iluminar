@@ -1,5 +1,6 @@
 from libraries.repo import Repo
 from libraries.exception import MVCError
+from libraries.neumann import DB
 
 class CInfo:
 
@@ -11,11 +12,12 @@ class CInfo:
 		try:
 			course = props.get('course', '')
 			name = props.get('name', '')	
-			content = props.get('content', '')
+			ccontent = props.get('content', '')
 			info = {
 				'course':course,
 				'name':name,
-				'content':content
+				'content':ccontent,
+				'created':Repo.time()
 			}
 			db = DB.connect()
 			rowsInserted = db.insert(CInfo.table, info)
@@ -27,7 +29,7 @@ class CInfo:
 			else:
 				content['code'] = 'PLATFORM:ERROR:DB_UNKNOWN'
 		except MVCError as e: content['code'] = str(e)
-		except Exception as e: content['exception'] = MVCError.catch(e)
+		except Exception as e: MVCError.catch(e)
 		return Repo.api('models:cinfo#create', status, content)
 
 	@staticmethod
