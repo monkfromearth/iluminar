@@ -40,21 +40,22 @@ def scrapToDatabase():
 		for course in data[tag]:
 			if not validators.url(course['link']): continue
 			else:
-				site = urlparse(course['link'])
-				print site
-				if site.netloc == 'www.udacity.com' or site.netloc == 'udacity.com':
-					result = Udacity.fromCoursePage(course['link'])
-					creation = Course.create({
-						'tag':id,
-						'title':course['title'],
-						'link':course['link'],
-						'created':Repo.time()
-					})
-					if creation['status']:
-						CInfo.create({
-							'course':creation['content']['info']['id'],
-							'name':'content',
-							'content':json.dumps(result['content'])
-						})
+				# site = urlparse(course['link'])
+				# print site
+				# if site.netloc == 'www.udacity.com' or site.netloc == 'udacity.com':
+					# result = Udacity.fromCoursePage(course['link'])
+				print course['title'], course['link']
+				creation = Course.create({
+					'tag':id,
+					'title':course['title'],
+					'link':course['link'],
+					'created':Repo.time()
+				})
+					# if creation['status']:
+					# 	CInfo.create({
+					# 		'course':creation['content']['info']['id'],
+					# 		'name':'content',
+					# 		'content':json.dumps(result['content'])
+					# 	})
 
 	return jsonify(data)

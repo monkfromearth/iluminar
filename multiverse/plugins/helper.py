@@ -56,3 +56,5 @@ class Helper:
 			return 'udacity'
 		elif result.netloc == 'coursera.org' or result.netloc == 'www.coursera.org':
 			return 'coursera'
+		else:
+			return 'iluminar'

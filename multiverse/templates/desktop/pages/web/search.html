@@ -66,9 +66,13 @@ You searched for "{{ query }}"
 							  </div>
 							  <div class="media-body">
 							    <h4 class="media-heading"><a href="{{ course.link }}" target="_blank">{{ course.title }}</a></h4>
-							    <p class="help-block">Powered by <b>{{ partner|title  }}</b></p>
+							    {% if partner != 'iluminar' %}
+								<p class="help-block">Powered by <b>{{ partner|title  }}</b></p>
+							    {% endif %}
 							    {% if partner == 'coursera' or partner == 'udemy' %}
-								<button class="btn btn-primary btn-sm learn-more" type="button" data-link="{{ course.link }}" data-title="{{ course.title }}" data-partner="{{ partner }}"><i class="fa fa-fw fa-search"></i> Learn More</button>
+								<div class="text-right">
+									<button class="btn btn-primary btn-sm learn-more" type="button" data-link="{{ course.link }}" data-title="{{ course.title }}" data-partner="{{ partner }}"><i class="fa fa-fw fa-search"></i> Learn More</button>
+								</div>
 							    {% endif %}
 							  </div>
 							</div>
@@ -82,7 +86,6 @@ You searched for "{{ query }}"
 			{% endif %}
 			{% endblock %}
 		</div>
-		<div class="col-lg-3 col-md-3"></div>
 	</div>
 </div>
 <div id="learnMoreModal" class="modal fade" role="dialog">
